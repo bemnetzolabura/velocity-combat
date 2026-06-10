@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Velocity Combat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="game-container">
+    <div id="loading-screen" class="screen">
+      <div class="loading-content">
+        <h1 class="game-title">VELOCITY COMBAT</h1>
+        <div class="loading-bar-container">
+          <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <p id="loading-text">Loading assets...</p>
+      </div>
+    </div>
+
+    <div id="menu-screen" class="screen">
+      <div class="menu-bg"></div>
+      <div class="menu-content">
+        <h1 class="game-title">VELOCITY COMBAT</h1>
+        <p class="subtitle">Race. Fight. Dominate.</p>
+        <div class="menu-form">
+          <input type="text" id="username-input" class="menu-input" placeholder="Enter your name" maxlength="16" value="Player">
+          <div class="car-select">
+            <label>Choose your car:</label>
+            <div class="car-options" id="car-options">
+              <div class="car-option selected" data-car="street">
+                <div class="car-swatch" style="background:#3498db"></div>
+                <span>Street</span>
+              </div>
+              <div class="car-option" data-car="muscle">
+                <div class="car-swatch" style="background:#e74c3c"></div>
+                <span>Muscle</span>
+              </div>
+              <div class="car-option" data-car="hyper">
+                <div class="car-swatch" style="background:#f1c40f"></div>
+                <span>Hyper</span>
+              </div>
+            </div>
+          </div>
+          <button id="play-btn" class="menu-btn primary-btn">PLAY</button>
+          <button id="leaderboard-btn" class="menu-btn secondary-btn">LEADERBOARD</button>
+        </div>
+        <div class="controls-hint">
+          <p>WASD - Drive | Mouse - Aim | Click - Shoot | Space - Nitro</p>
+          <p>Hold Click 1s - Missile Lock</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="lobby-screen" class="screen hidden">
+      <div class="lobby-content">
+        <h2>FINDING PLAYERS</h2>
+        <div class="lobby-players" id="lobby-players"></div>
+        <div class="countdown-overlay hidden" id="countdown-overlay">
+          <div class="countdown-number" id="countdown-number">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="game-screen" class="screen hidden">
+      <canvas id="game-canvas"></canvas>
+      <div id="hud">
+        <div id="speedometer">
+          <div class="hud-label">SPEED</div>
+          <div class="hud-value" id="speed-value">0</div>
+        </div>
+        <div id="health-bar-container">
+          <div class="hud-label">HP</div>
+          <div class="bar-bg">
+            <div class="bar-fill" id="health-fill" style="width:100%"></div>
+          </div>
+          <span id="health-text">100</span>
+        </div>
+        <div id="nitro-bar-container">
+          <div class="hud-label">NITRO</div>
+          <div class="bar-bg">
+            <div class="bar-fill nitro-fill" id="nitro-fill" style="width:0%"></div>
+          </div>
+          <span id="nitro-text">0</span>
+        </div>
+        <div id="weapon-info">
+          <div class="weapon-slot" id="weapon-primary">
+            <span>MG</span>
+          </div>
+          <div class="weapon-slot" id="weapon-secondary">
+            <span>M: <span id="missile-count">5</span></span>
+          </div>
+        </div>
+        <div id="scoreboard">
+          <div class="hud-label">SCOREBOARD</div>
+          <div id="scoreboard-list"></div>
+        </div>
+        <div id="minimap">
+          <canvas id="minimap-canvas" width="120" height="120"></canvas>
+        </div>
+        <div id="lap-counter">
+          LAP <span id="lap-current">0</span>/3
+        </div>
+        <div id="kill-feed"></div>
+        <div id="crosshair"></div>
+        <div id="missile-lock-indicator" class="hidden">LOCKING...</div>
+      </div>
+    </div>
+
+    <div id="gameover-screen" class="screen hidden">
+      <div class="gameover-content">
+        <h1>GAME OVER</h1>
+        <div id="gameover-winner" class="winner-text"></div>
+        <div id="gameover-results"></div>
+        <button id="return-menu-btn" class="menu-btn primary-btn">MAIN MENU</button>
+      </div>
+    </div>
+
+    <div id="leaderboard-screen" class="screen hidden">
+      <div class="leaderboard-content">
+        <h1>LEADERBOARD</h1>
+        <div id="leaderboard-list"></div>
+        <button id="leaderboard-back-btn" class="menu-btn secondary-btn">BACK</button>
+      </div>
+    </div>
+
+    <div id="mobile-controls" class="hidden">
+      <div class="mobile-left" id="mobile-left">
+        <div class="joystick-area" id="steer-joystick">
+          <div class="joystick-knob" id="joystick-knob"></div>
+        </div>
+      </div>
+      <div class="mobile-right">
+        <div class="joystick-area" id="throttle-joystick">
+          <div class="joystick-knob" id="throttle-knob"></div>
+        </div>
+        <div class="mobile-buttons">
+          <button class="mobile-btn" id="mobile-shoot">FIRE</button>
+          <button class="mobile-btn" id="mobile-nitro">NITRO</button>
+          <button class="mobile-btn" id="mobile-missile">MISSILE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/assets.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/cars.js"></script>
+  <script src="js/weapons.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
