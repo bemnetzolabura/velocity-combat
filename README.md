@@ -1,27 +1,17 @@
 # VELOCITY COMBAT
-
-> **Race. Fight. Dominate.** — An 8-player multiplayer racing-combat game in the browser.
-
+> **Race. Fight. Dominate.** — An 8-player multiplayer racing-combat game in the browser
 8 players enter an arena. Race + fight. Last car standing OR first to finish wins. Built with Three.js, Socket.io, and Cannon-es.
-
 ---
-
 ## Quick Start
-
 ```bash
 npm install && npm run dev
 ```
-
 This starts:
 - **Server** (port 3001) — game logic, matchmaking, physics, AI
 - **Client** (port 3000) — Three.js 3D game
-
 Open **http://localhost:3000** in your browser.
-
 ---
-
 ## How to Play
-
 ### PC Controls
 | Action | Input |
 |--------|-------|
@@ -34,9 +24,7 @@ Open **http://localhost:3000** in your browser.
 Left thumb = steer joystick  
 Right thumb = gas/brake joystick  
 Buttons: FIRE, NITRO, MISSILE
-
 ---
-
 ## Features
 
 | # | Feature | Details |
