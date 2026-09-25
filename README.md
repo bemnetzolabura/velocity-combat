@@ -85,9 +85,7 @@ velocity-combat/
 - **Web Audio API** — Procedural sound effects
 - **Express** — Static file serving
 
----
 
-## Deploy
 
 ### Backend (Render)
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
@@ -108,9 +106,7 @@ velocity-combat/
 
 > Update the server URL in `client/js/network.js` to point to your Render URL.
 
----
 
-## Development
 
 ```bash
 # Install dependencies
